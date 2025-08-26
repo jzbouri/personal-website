@@ -9,8 +9,8 @@ export default function Home() {
         "This website is a work in progress...",
         "Come back later please",
       ]}
-      className="text-4xl font-bold"
-      pauseDuration={1500}
+      className="font-mono text-7xl leading-none"
+      pauseDuration={2000}
       typingSpeed={100}
       loop={true}
     />
