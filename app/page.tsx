@@ -9,7 +9,7 @@ export default function Home() {
         "This website is a work in progress...",
         "Come back later please",
       ]}
-      className="font-mono text-7xl leading-none"
+      className="font-mono text-5xl leading-none"
       pauseDuration={2000}
       typingSpeed={100}
       loop={true}
