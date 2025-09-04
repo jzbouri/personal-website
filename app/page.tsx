@@ -1,18 +1,20 @@
-import TextType from "@/components/reactbits/TextType";
+"use client";
+
+import Tabs from "@/components/ui/Tabs";
+import Header from "@/components/layout/Header";
+import SoftwareEngineering from "@/components/sections/SoftwareEngineering";
+import Athletics from "@/components/sections/Athletics";
 
 export default function Home() {
+  const items = [
+    { id: "software", label: "Software Engineering", content: <SoftwareEngineering /> },
+    { id: "athletics", label: "Athletics", content: <Athletics /> },
+  ];
+
   return (
-    <TextType
-      text={[
-        "Hello there...",
-        "I'm Jalal Bouri, a software engineer",
-        "This website is a work in progress...",
-        "Come back later please",
-      ]}
-      className="font-mono text-5xl leading-none"
-      pauseDuration={2000}
-      typingSpeed={100}
-      loop={true}
-    />
+    <main className="mx-auto max-w-3xl">
+      <Header />
+      <Tabs items={items} />
+    </main>
   );
 }
