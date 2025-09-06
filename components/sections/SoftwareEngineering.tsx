@@ -91,7 +91,7 @@ export default function SoftwareEngineering() {
           <h2 className="text-2xl font-semibold tracking-tight">
             Software Engineering
           </h2>
-          <p className="mt-1 text-sm text-white/60">Some companies/organizations I've worked for.</p>
+          <p className="mt-1 text-sm text-white/60">Some companies/organizations I&apos;ve worked for.</p>
         </div>
         <div className="flex">
           <a
