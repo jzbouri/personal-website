@@ -6,12 +6,12 @@ import { ExperienceItem } from "../experience/types";
 const experiences: ExperienceItem[] = [
   {
     id: "uwaggs",
-    companyName: "UW Analytics Group for Games & Sports",
+    companyName: "UWAGGS",
     companyLogoSrc: "/uwaggs_logo.jpeg",
     companyDescription: "For-credit program that helps uWaterloo's varsity teams analyze and improve their performance through data science",
     startDate: "September 2025",
     endDate: "Present",
-    roleDescription: "Creating and enhancing software that is used by data scientists to assist uWaterloo's varsity women's hockey team",
+    roleDescription: "Creating and enhancing software used by data scientists to assist uWaterloo's varsity women's hockey team",
     companyUrl: "https://www.uwaggs.ca/",
     location: "Waterloo, ON 🇨🇦",
   },
@@ -28,7 +28,7 @@ const experiences: ExperienceItem[] = [
   },
   {
     id: "deloitte-2025",
-    companyName: "Deloitte",
+    companyName: "Deloitte (2025)",
     companyLogoSrc: "/deloitte_logo.png",
     companyDescription: "The largest professional services company in the world",
     startDate: "May 2025",
@@ -39,7 +39,7 @@ const experiences: ExperienceItem[] = [
   },
   {
     id: "shipd",
-    companyName: "Shipd (a division of Datacurve, YC W24)",
+    companyName: "Shipd / Datacurve (YC W24)",
     companyLogoSrc: "/shipd_logo.jpeg",
     companyDescription: "A platform that allows users to create and solve unique data structures and algorithms problems",
     startDate: "Sept 2024",
@@ -50,7 +50,7 @@ const experiences: ExperienceItem[] = [
   },
   {
     id: "deloitte-2024",
-    companyName: "Deloitte",
+    companyName: "Deloitte (2024)",
     companyLogoSrc: "/deloitte_logo.png",
     companyDescription: "The largest professional services company in the world",
     startDate: "May 2024",
@@ -85,11 +85,30 @@ const experiences: ExperienceItem[] = [
 
 export default function SoftwareEngineering() {
   return (
-    <section className="space-y-3">
-      <h2 className="text-xl font-semibold tracking-tight">Software Engineering</h2>
-      <p className="text-white/60">Some of the work I've done</p>
-        <ExperienceList items={experiences} emptyState={<span>Add your experiences to see them here.</span>} />
-      </section>
+    <section className="space-y-4">
+      <div className="flex items-baseline justify-between">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight">
+            Software Engineering
+          </h2>
+          <p className="mt-1 text-sm text-white/60">Some companies/organizations I've worked for.</p>
+        </div>
+        <div className="flex">
+          <a
+            href="mailto:jz.bouri@gmail.com"
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1.5 text-xs font-semibold text-emerald-200 transition-colors hover:bg-emerald-400/20 hover:text-emerald-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
+            aria-label="Email Jalal about opportunities"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden className="opacity-90">
+              <path d="M20 4H4c-1.103 0-2 .897-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6c0-1.103-.897-2-2-2zm0 4.236-8 5.333-8-5.333V6l8 5.333L20 6v2.236z"/>
+            </svg>
+            <span className="hidden sm:inline">Open to opportunities</span>
+            <span className="sm:hidden">Contact</span>
+          </a>
+        </div>
+      </div>
+      <ExperienceList items={experiences} emptyState={<span>Add your experiences to see them here.</span>} />
+    </section>
   );
 }
 

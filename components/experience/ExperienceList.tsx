@@ -18,7 +18,7 @@ export default function ExperienceList({ items, emptyState }: ExperienceListProp
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 items-stretch gap-4 sm:gap-5 md:grid-cols-2">
       {items.map((item) => (
         <ExperienceCard key={item.id} item={item} />
       ))}
