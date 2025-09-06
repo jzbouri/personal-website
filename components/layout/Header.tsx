@@ -1,18 +1,22 @@
 "use client";
 
-import TextType from "@/components/reactbits/TextType";
+import TypingText from "@/components/reactbits/TypingText";
 
-export default function Header() {
+interface HeaderProps {
+  subtitle: string;
+}
+
+export default function Header({ subtitle }: HeaderProps) {
   return (
     <header className="mb-10">
       <h1 className="text-4xl font-mono tracking-tight">Jalal Bouri</h1>
       <div className="mt-3">
-        <TextType
-          text={["Software engineer", "Athlete"]}
+        <TypingText
+          text={subtitle}
           className="font-mono text-lg leading-none text-white/80"
           typingSpeed={80}
-          pauseDuration={1200}
-          loop={true}
+          backspaceSpeed={40}
+          pauseBeforeBackspace={0}
         />
       </div>
     </header>

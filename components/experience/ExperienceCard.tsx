@@ -27,7 +27,7 @@ export default function ExperienceCard({ item }: ExperienceCardProps) {
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-start gap-3">
-            <h3 className="truncate text-base font-semibold leading-tight tracking-tight text-white">
+            <h3 className="truncate text-base font-semibold leading-tight tracking-tight text-white font-brand-mono">
               {item.companyName}
             </h3>
           </div>
