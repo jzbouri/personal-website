@@ -20,9 +20,24 @@ export default function Home() {
     return "";
   }, [activeId]);
 
+  const links = useMemo(() => {
+    if (activeId === "software") {
+      return [
+        { label: "GitHub", href: "https://github.com/jzbouri" },
+        { label: "LinkedIn", href: "https://www.linkedin.com/in/jalal-bouri" },
+      ];
+    }
+    if (activeId === "athletics") {
+      return [
+        { label: "Strava", href: "https://www.strava.com/athletes/56842043" },
+      ];
+    }
+    return [] as { label: string; href: string }[];
+  }, [activeId]);
+
   return (
     <main className="mx-auto max-w-3xl">
-      <Header subtitle={subtitle} />
+      <Header subtitle={subtitle} links={links} />
       <Tabs items={items} initialTabId={activeId} onChange={setActiveId} />
     </main>
   );
