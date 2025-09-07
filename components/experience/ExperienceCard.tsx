@@ -52,12 +52,12 @@ export default function ExperienceCard({ item }: ExperienceCardProps) {
 
       <div className="mt-3 space-y-1.5">
         <div className="text-[11px] uppercase tracking-wider text-white/40">About</div>
-        <p className="text-[15px] leading-relaxed text-white/85">{item.companyDescription}</p>
+        <p className="text-[15px] leading-relaxed text-white/85 [&_a]:text-emerald-300 [&_a:hover]:text-emerald-200 [&_a]:underline [&_a]:decoration-emerald-400/50 [&_a]:underline-offset-2">{item.companyDescription}</p>
       </div>
 
       <div className="mt-3 space-y-1.5">
         <div className="text-[11px] uppercase tracking-wider text-white/40">What I did</div>
-        <p className="relative z-10 text-[15px] leading-[1.7] text-white/85">{item.roleDescription}</p>
+        <p className="relative z-10 text-[15px] leading-[1.7] text-white/85 [&_a]:text-emerald-300 [&_a:hover]:text-emerald-200 [&_a]:underline [&_a]:decoration-emerald-400/50 [&_a]:underline-offset-2">{item.roleDescription}</p>
       </div>
     </article>
     </Link>

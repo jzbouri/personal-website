@@ -59,7 +59,14 @@ export default function ProjectCard({ item }: ProjectCardProps) {
 
         <div className="mt-3 space-y-1.5">
           <div className="text-[11px] uppercase tracking-wider text-white/40">About</div>
-          <p className="text-[15px] leading-relaxed text-white/85">{item.description}</p>
+          {typeof item.description === "string" ? (
+            <p
+              className="text-[15px] leading-relaxed text-white/85 [&_a]:text-emerald-300 [&_a:hover]:text-emerald-200 [&_a]:underline [&_a]:decoration-emerald-400/50 [&_a]:underline-offset-2"
+              dangerouslySetInnerHTML={{ __html: item.description }}
+            />
+          ) : (
+            <p className="text-[15px] leading-relaxed text-white/85 [&_a]:text-emerald-300 [&_a:hover]:text-emerald-200 [&_a]:underline [&_a]:decoration-emerald-400/50 [&_a]:underline-offset-2">{item.description}</p>
+          )}
         </div>
 
         {item.tech?.length ? (
