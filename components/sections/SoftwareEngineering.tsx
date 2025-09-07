@@ -5,6 +5,7 @@ import { ExperienceItem } from "../experience/types";
 import GitHubContributions from "./GitHubContributions";
 import ProjectList from "@/components/projects/ProjectList";
 import { ProjectItem } from "../projects/types";
+import SoftwareAbout from "@/components/sections/SoftwareAbout";
 
 import SoftwareNav from "@/components/sections/SoftwareNav";
 const experiences: ExperienceItem[] = [
@@ -148,6 +149,7 @@ export default function SoftwareEngineering() {
   return (
     <section className="space-y-4">
       <SoftwareNav />
+      <SoftwareAbout />
 
       <div id="github" className="scroll-mt-28 sm:scroll-mt-32">
         <GitHubContributions login="jzbouri" />
