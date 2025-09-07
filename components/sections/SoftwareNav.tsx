@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { FaArrowUp } from "react-icons/fa6";
 
 const SECTIONS = [
   { id: "about", label: "About" },
@@ -19,6 +20,7 @@ export default function SoftwareNav() {
   const isAutoScrollingRef = useRef<boolean>(false);
   const rafRef = useRef<number | null>(null);
   const [isStuck, setIsStuck] = useState<boolean>(false);
+  const [shiftX, setShiftX] = useState<number>(0);
 
   useEffect(() => {
     const computeActive = () => {
@@ -87,6 +89,22 @@ export default function SoftwareNav() {
     };
   }, [activeId]);
 
+  useEffect(() => {
+    const computeShift = () => {
+      const listEl = listRef.current;
+      const wrapperEl = listEl?.parentElement as HTMLElement | null;
+      if (!listEl || !wrapperEl) return;
+      const wrapperWidth = wrapperEl.clientWidth;
+      const listWidth = listEl.offsetWidth;
+      const leftover = Math.max(0, wrapperWidth - listWidth);
+      const target = isStuck ? leftover : leftover / 2;
+      setShiftX(target);
+    };
+    computeShift();
+    window.addEventListener("resize", computeShift);
+    return () => window.removeEventListener("resize", computeShift);
+  }, [isStuck, activeId]);
+
   const scrollTo = (id: SectionId) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setActiveId(id);
@@ -122,43 +140,84 @@ export default function SoftwareNav() {
     }
   };
 
+  const scrollToTop = () => {
+    const startY = window.scrollY;
+    if (startY === 0) return;
+    const targetTop = 0;
+    const delta = targetTop - startY;
+    const duration = Math.min(800, Math.max(300, Math.abs(delta) * 0.4));
+    const startTime = performance.now();
+    const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    isAutoScrollingRef.current = true;
+    const step = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      const eased = easeInOutCubic(progress);
+      window.scrollTo({ top: startY + delta * eased });
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(step);
+      } else {
+        isAutoScrollingRef.current = false;
+        setActiveId(SECTIONS[0].id);
+      }
+    };
+    rafRef.current = requestAnimationFrame(step);
+  };
+
   return (
     <nav
       ref={navRef}
-      className={
-        "sticky top-0 z-40 py-2 " +
-        (isStuck
-          ? "mx-[calc(50%-50vw)] px-[calc(50vw-50%)] bg-gradient-to-b from-black/95 via-black/95 to-black/95 border-b border-white/10 shadow-lg shadow-black/30"
-          : "-mx-4 px-4 bg-transparent")
-      }
+      className={"sticky top-0 z-40 py-2 mx-[calc(50%-50vw)] px-[calc(50vw-50%)]"}
     >
-      <div className="w-full overflow-x-auto">
-        <ul ref={listRef} className="relative mx-auto flex w-max gap-1 rounded-full border border-white/10 bg-white/5 p-1">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute top-0 left-0 h-full rounded-full border border-emerald-400/30 bg-emerald-400/20 transition-all duration-300 ease-out"
-            style={{ transform: `translateX(${indicator.x}px)`, width: indicator.width }}
-          />
-          {SECTIONS.map((section) => {
-            const isActive = activeId === section.id;
-            return (
-              <li key={section.id}>
-                <a
-                  href={`#${section.id}`}
-                  onClick={scrollTo(section.id)}
-                  aria-current={isActive ? "page" : undefined}
-                  className={
-                    "relative z-10 inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-medium transition-colors border-transparent " +
-                    (isActive ? "text-emerald-100" : "text-white/70 hover:text-white/90")
-                  }
-                  ref={(el) => { linkRefs.current[section.id] = el; }}
-                >
-                  {section.label}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+      <div className="pointer-events-none absolute inset-0 transition-opacity duration-300 ease-out" aria-hidden style={{ opacity: isStuck ? 1 : 0 }}>
+        <div className="h-full w-full bg-gradient-to-b from-black/95 via-black/95 to-black/95 border-b border-white/10 shadow-lg shadow-black/30 backdrop-blur-sm" />
+      </div>
+      <div className="relative flex items-center gap-2 px-4">
+        <button
+          type="button"
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+          title="Scroll to top"
+          className={
+            "absolute left-4 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-white/80 shadow-sm shadow-white/5 transition-all duration-300 ease-out hover:border-white/20 hover:bg-white/[0.12] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 " +
+            (isStuck ? "opacity-100 translate-y-[-50%]" : "opacity-0 -translate-y-[60%] pointer-events-none")
+          }
+        >
+          <FaArrowUp size={16} />
+        </button>
+        <div className="flex-1 w-0 overflow-x-auto">
+          <ul
+            ref={listRef}
+            className="relative flex w-max gap-1 rounded-full border border-white/10 bg-white/5 p-1 transition-transform duration-300 ease-out"
+            style={{ transform: `translateX(${shiftX}px)` }}
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute top-0 left-0 h-full rounded-full border border-emerald-400/30 bg-emerald-400/20 transition-all duration-300 ease-out"
+              style={{ transform: `translateX(${indicator.x}px)`, width: indicator.width }}
+            />
+            {SECTIONS.map((section) => {
+              const isActive = activeId === section.id;
+              return (
+                <li key={section.id}>
+                  <a
+                    href={`#${section.id}`}
+                    onClick={scrollTo(section.id)}
+                    aria-current={isActive ? "page" : undefined}
+                    className={
+                      "relative z-10 inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-medium transition-colors border-transparent " +
+                      (isActive ? "text-emerald-100" : "text-white/70 hover:text-white/90")
+                    }
+                    ref={(el) => { linkRefs.current[section.id] = el; }}
+                  >
+                    {section.label}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </nav>
   );
