@@ -48,6 +48,10 @@ export default function TabsLayout({
           { label: "Spotify", href: "https://open.spotify.com/user/aqxyzyqukhns1qtu04uji0os5" },
           { label: "Last.fm", href: "https://www.last.fm/user/tubulant_lemon" },
         ];
+      case "life":
+        return [
+          { label: "Instagram", href: "https://instagram.com/jalalbouri" },
+        ];
       default:
         return [];
     }
