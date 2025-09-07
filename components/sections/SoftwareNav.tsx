@@ -23,7 +23,12 @@ export default function SoftwareNav() {
   const [isStuck, setIsStuck] = useState<boolean>(false);
   const [shiftX, setShiftX] = useState<number>(0);
   const [isCompact, setIsCompact] = useState<boolean>(false);
+  const [hasMounted, setHasMounted] = useState<boolean>(false);
   
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   useEffect(() => {
     const computeActive = () => {
@@ -212,7 +217,7 @@ export default function SoftwareNav() {
         <div className="flex-1 w-0 overflow-x-auto">
           <ul
             ref={listRef}
-            className="relative flex w-max gap-1 rounded-full border border-white/10 bg-white/5 p-1 transition-transform duration-300 ease-out"
+            className={`relative flex w-max gap-1 rounded-full border border-white/10 bg-white/5 p-1 transition-opacity duration-300 ease-out ${hasMounted ? "opacity-100" : "opacity-0"}`}
             style={{ transform: `translateX(${shiftX}px)` }}
           >
             <div
