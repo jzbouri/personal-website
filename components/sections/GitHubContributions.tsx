@@ -60,7 +60,6 @@ export default function GitHubContributions({ login }: { login: string }) {
     const fromMonth = new Date(now.getTime() - 30 * msInDay).toISOString();
     const fromWeek = new Date(now.getTime() - 7 * msInDay).toISOString();
 
-    // Attempt to hydrate from localStorage cache (5-minute TTL)
     try {
       const key = (k: string) => `gh-contrib:${login}:${k}`;
       const cached = {
@@ -125,7 +124,6 @@ export default function GitHubContributions({ login }: { login: string }) {
     };
   }, [login, now]);
 
-  // Count-up animation hook
   function useCountUp(value: number | undefined, durationMs = 400) {
     const [display, setDisplay] = useState(0);
     const startRef = useRef<number | null>(null);
