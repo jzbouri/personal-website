@@ -12,23 +12,47 @@ export default function TabsLayout({
 
   const activeId = useMemo(() => {
     if (pathname.startsWith("/athletics")) return "athletics";
+    if (pathname.startsWith("/music")) return "music";
+    if (pathname.startsWith("/life")) return "life";
     return "software";
   }, [pathname]);
 
-  const subtitle = activeId === "software" ? "Software engineer" : "Athlete";
+  const subtitle = (() => {
+    switch (activeId) {
+      case "software":
+        return "Software engineer";
+      case "athletics":
+        return "Athlete";
+      case "music":
+        return "Music enjoyer";
+      case "life":
+        return "Chill guy";
+      default:
+        return "Software engineer";
+    }
+  })();
 
-  const links = activeId === "software"
-    ? [
-        { label: "GitHub", href: "https://github.com/jzbouri" },
-        { label: "LinkedIn", href: "https://www.linkedin.com/in/jalal-bouri" },
-      ]
-    : [
-        { label: "Strava", href: "https://www.strava.com/athletes/56842043" },
-      ];
+  const links = (() => {
+    switch (activeId) {
+      case "software":
+        return [
+          { label: "GitHub", href: "https://github.com/jzbouri" },
+          { label: "LinkedIn", href: "https://www.linkedin.com/in/jalal-bouri" },
+        ];
+      case "athletics":
+        return [
+          { label: "Strava", href: "https://www.strava.com/athletes/56842043" },
+        ];
+      default:
+        return [];
+    }
+  })();
 
   const items = [
     { id: "software", label: "Software Engineering", href: "/software" },
     { id: "athletics", label: "Athletics", href: "/athletics" },
+    { id: "music", label: "Music", href: "/music" },
+    { id: "life", label: "Life", href: "/life" },
   ];
 
   return (
