@@ -90,7 +90,7 @@ export default function SoftwareEngineering() {
       <GitHubContributions login="jzbouri" />
       <div className="flex items-baseline justify-between">
         <div>
-          <p className="mt-1 text-sm text-white/60">Some companies/organizations I&apos;ve worked for.</p>
+          <p className="mt-1 text-sm text-white/60">Some companies/organizations I&apos;ve worked for:</p>
         </div>
         <div className="flex">
           <a

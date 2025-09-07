@@ -25,13 +25,13 @@ export default function Header({ subtitle, links = [] }: HeaderProps) {
 
       <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-4xl sm:text-5xl font-mono tracking-tight text-white">Jalal Bouri</h1>
+          <h1 className="text-3xl sm:text-4xl font-mono tracking-tight text-white">Jalal Bouri</h1>
           <div className="mt-4">
             <TypingText
               text={subtitle}
               className="font-mono text-lg sm:text-xl leading-none text-white/80"
-              typingSpeed={80}
-              backspaceSpeed={40}
+              typingSpeed={30}
+              backspaceSpeed={15}
               pauseBeforeBackspace={0}
             />
           </div>
