@@ -62,12 +62,19 @@ export default function SoftwareNav() {
 
       const isFirst = activeId === SECTIONS[0].id;
       const isLast = activeId === SECTIONS[SECTIONS.length - 1].id;
+      const borderLeft = parseFloat(style.borderLeftWidth || "0");
+      const borderRight = parseFloat(style.borderRightWidth || "0");
+
       if (isFirst) {
-        x = Math.max(0, x - paddingLeft);
-        width += paddingLeft;
+        const extraLeft = paddingLeft + borderLeft;
+        x = Math.max(0, x - extraLeft);
+        width += extraLeft;
       }
+
       if (isLast) {
-        width += paddingRight;
+        const extraRight = paddingRight + borderRight;
+        x = Math.max(0, x - extraRight / 2);
+        width += extraRight;
       }
       setIndicator({ x, width });
     };
