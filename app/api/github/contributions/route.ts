@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
     const summary = await fetchContributionSummary({ login, from, to });
 
-    return json(
+    const response = json(
       {
         login: summary.login,
         range: summary.range,
@@ -30,6 +30,11 @@ export async function GET(req: NextRequest) {
       },
       200
     );
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=300, s-maxage=300, stale-while-revalidate=60"
+    );
+    return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return json({ error: message }, 500);

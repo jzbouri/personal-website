@@ -2,6 +2,7 @@
 
 import ExperienceList from "@/components/experience/ExperienceList";
 import { ExperienceItem } from "../experience/types";
+import GitHubContributions from "./GitHubContributions";
 
 const experiences: ExperienceItem[] = [
   {
@@ -86,6 +87,7 @@ const experiences: ExperienceItem[] = [
 export default function SoftwareEngineering() {
   return (
     <section className="space-y-4">
+      <GitHubContributions login="jzbouri" />
       <div className="flex items-baseline justify-between">
         <div>
           <p className="mt-1 text-sm text-white/60">Some companies/organizations I&apos;ve worked for.</p>
