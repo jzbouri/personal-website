@@ -65,7 +65,7 @@ export default function TabsLayout({
   ];
 
   return (
-    <main className="mx-auto max-w-3xl">
+    <main className="mx-auto max-w-5xl">
       <Header subtitle={subtitle} links={links} />
       <TabBar items={items} selectedId={activeId} />
       <div className="pt-6">{children}</div>
