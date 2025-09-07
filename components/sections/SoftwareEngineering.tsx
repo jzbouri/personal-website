@@ -6,6 +6,7 @@ import GitHubContributions from "./GitHubContributions";
 import ProjectList from "@/components/projects/ProjectList";
 import { ProjectItem } from "../projects/types";
 
+import SoftwareNav from "@/components/sections/SoftwareNav";
 const experiences: ExperienceItem[] = [
   {
     id: "uwaggs",
@@ -146,33 +147,40 @@ const projects: ProjectItem[] = [
 export default function SoftwareEngineering() {
   return (
     <section className="space-y-4">
-      <GitHubContributions login="jzbouri" />
-      <div className="flex items-baseline justify-between">
-        <div>
-          <p className="mt-1 text-sm text-white/60">Some companies/organizations I&apos;ve worked for:</p>
-        </div>
-        <div className="flex">
-          <a
-            href="mailto:jz.bouri@gmail.com"
-            className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1.5 text-xs font-semibold text-emerald-200 transition-colors hover:bg-emerald-400/20 hover:text-emerald-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
-            aria-label="Email Jalal about opportunities"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden className="opacity-90">
-              <path d="M20 4H4c-1.103 0-2 .897-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6c0-1.103-.897-2-2-2zm0 4.236-8 5.333-8-5.333V6l8 5.333L20 6v2.236z"/>
-            </svg>
-            <span className="hidden sm:inline">Open to opportunities</span>
-            <span className="sm:hidden">Contact</span>
-          </a>
-        </div>
-      </div>
-      <ExperienceList items={experiences} emptyState={<span>No experiences added yet.</span>} />
+      <SoftwareNav />
 
-      <div className="mt-2">
-        <p className="mt-1 text-sm text-white/60">A few projects I&apos;ve built or contributed to:</p>
+      <div id="github" className="scroll-mt-28 sm:scroll-mt-32">
+        <GitHubContributions login="jzbouri" />
       </div>
-      <ProjectList items={projects} emptyState={<span>No projects added yet.</span>} />
+
+      <div id="experiences" className="scroll-mt-28 sm:scroll-mt-32 space-y-3">
+        <div className="flex items-baseline justify-between">
+          <div>
+            <p className="mt-1 text-sm text-white/60">Some companies/organizations I&apos;ve worked for:</p>
+          </div>
+          <div className="flex">
+            <a
+              href="mailto:jz.bouri@gmail.com"
+              className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1.5 text-xs font-semibold text-emerald-200 transition-colors hover:bg-emerald-400/20 hover:text-emerald-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
+              aria-label="Email Jalal about opportunities"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden className="opacity-90">
+                <path d="M20 4H4c-1.103 0-2 .897-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6c0-1.103-.897-2-2-2zm0 4.236-8 5.333-8-5.333V6l8 5.333L20 6v2.236z"/>
+              </svg>
+              <span className="hidden sm:inline">Open to opportunities</span>
+              <span className="sm:hidden">Contact</span>
+            </a>
+          </div>
+        </div>
+        <ExperienceList items={experiences} emptyState={<span>No experiences added yet.</span>} />
+      </div>
+
+      <div id="projects" className="mt-2 scroll-mt-28 sm:scroll-mt-32 space-y-3">
+        <div className="mt-2">
+          <p className="mt-1 text-sm text-white/60">A few projects I&apos;ve built or contributed to:</p>
+        </div>
+        <ProjectList items={projects} emptyState={<span>No projects added yet.</span>} />
+      </div>
     </section>
   );
 }
-
-
