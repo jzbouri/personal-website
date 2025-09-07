@@ -43,6 +43,11 @@ export default function TabsLayout({
         return [
           { label: "Strava", href: "https://www.strava.com/athletes/56842043" },
         ];
+      case "music":
+        return [
+          { label: "Spotify", href: "https://open.spotify.com/user/aqxyzyqukhns1qtu04uji0os5" },
+          { label: "Last.fm", href: "https://www.last.fm/user/tubulant_lemon" },
+        ];
       default:
         return [];
     }

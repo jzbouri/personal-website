@@ -1,7 +1,7 @@
 "use client";
 
 import TypingText from "@/components/reactbits/TypingText";
-import { FaGithub, FaLinkedin, FaStrava } from "react-icons/fa6";
+import { FaGithub, FaLinkedin, FaStrava, FaSpotify, FaLastfm } from "react-icons/fa6";
 
 interface HeaderProps {
   subtitle: string;
@@ -14,6 +14,8 @@ export default function Header({ subtitle, links = [] }: HeaderProps) {
     if (lower.includes("github")) return <FaGithub size={18} />;
     if (lower.includes("linkedin")) return <FaLinkedin size={18} />;
     if (lower.includes("strava")) return <FaStrava size={18} />;
+    if (lower.includes("spotify")) return <FaSpotify size={18} />;
+    if (lower.includes("last.fm") || lower.includes("lastfm") || lower.includes("last")) return <FaLastfm size={18} />;
     return <FaGithub size={18} />;
   };
 
