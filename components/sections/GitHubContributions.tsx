@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 
 type ContributionApiResponse = {
   login: string;
@@ -176,64 +177,77 @@ export default function GitHubContributions({ login }: { login: string }) {
   const yearOtherCount = useCountUp(yearOtherRaw, 400);
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-white/90 font-brand-mono">GitHub contributions</h3>
-        {state.isLoading ? (
-          <span className="inline-flex items-center gap-2 text-xs text-white/60" aria-busy="true">
-            <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/30 border-t-white/80" />
-            Loading
-          </span>
-        ) : state.error ? (
-          <span className="text-xs text-red-300/80">{state.error}</span>
-        ) : null}
-      </div>
+    <Link
+      href={`https://github.com/${encodeURIComponent(login)}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Visit GitHub profile ${login}`}
+      className="group block rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+    >
+      <article className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.03] cursor-pointer">
+        <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden>
+          <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_0%_0%,rgba(96,165,250,0.16),transparent_60%),radial-gradient(120%_120%_at_100%_100%,rgba(34,211,238,0.16),transparent_60%),radial-gradient(140%_140%_at_100%_0%,rgba(192,132,252,0.16),transparent_60%)]" />
+        </div>
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-white/90 font-brand-mono">GitHub contributions</h3>
+            {state.isLoading ? (
+              <span className="inline-flex items-center gap-2 text-xs text-white/60" aria-busy="true">
+                <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/30 border-t-white/80" />
+                Loading
+              </span>
+            ) : state.error ? (
+              <span className="text-xs text-red-300/80">{state.error}</span>
+            ) : null}
+          </div>
 
-      <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
-        <div className="rounded-lg border border-emerald-400/25 bg-emerald-400/10 p-4 md:col-span-2 h-full flex flex-col">
-          <p className="text-[11px] uppercase tracking-wide text-emerald-200/80">Past year</p>
-          <p className="mt-1 text-3xl font-extrabold text-emerald-100">
-            {state.isLoading ? <span className="inline-block h-6 w-20 animate-pulse rounded bg-emerald-300/30" /> : yearCount}
-          </p>
-          <div className="mt-auto pt-2 grid w-full max-w-[420px] grid-cols-3 gap-2 sm:max-w-[520px]">
-            <div className="rounded-md border border-emerald-400/15 bg-emerald-400/5 px-3 py-2 text-center">
-              <p className="text-base font-bold text-emerald-100 md:text-lg">
-                {state.isLoading ? <span className="inline-block h-5 w-10 animate-pulse rounded bg-emerald-300/30" /> : yearCommitsCount}
+          <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
+            <div className="rounded-lg border border-emerald-400/25 bg-emerald-400/10 p-4 md:col-span-2 h-full flex flex-col">
+              <p className="text-[11px] uppercase tracking-wide text-emerald-200/80">Past year</p>
+              <p className="mt-1 text-3xl font-extrabold text-emerald-100">
+                {state.isLoading ? <span className="inline-block h-6 w-20 animate-pulse rounded bg-emerald-300/30" /> : yearCount}
               </p>
-              <p className="text-[10px] uppercase tracking-wide text-emerald-200/70">Commits</p>
+              <div className="mt-auto pt-2 grid w-full max-w-[420px] grid-cols-3 gap-2 sm:max-w-[520px]">
+                <div className="rounded-md border border-emerald-400/15 bg-emerald-400/5 px-3 py-2 text-center">
+                  <p className="text-base font-bold text-emerald-100 md:text-lg">
+                    {state.isLoading ? <span className="inline-block h-5 w-10 animate-pulse rounded bg-emerald-300/30" /> : yearCommitsCount}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-wide text-emerald-200/70">Commits</p>
+                </div>
+                <div className="rounded-md border border-emerald-400/15 bg-emerald-400/5 px-3 py-2 text-center">
+                  <p className="text-base font-bold text-emerald-100 md:text-lg">
+                    {state.isLoading ? <span className="inline-block h-5 w-8 animate-pulse rounded bg-emerald-300/30" /> : yearPrsCount}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-wide text-emerald-200/70">PRs</p>
+                </div>
+                <div className="rounded-md border border-emerald-400/15 bg-emerald-400/5 px-3 py-2 text-center">
+                  <p className="text-base font-bold text-emerald-100 md:text-lg">
+                    {state.isLoading ? <span className="inline-block h-5 w-10 animate-pulse rounded bg-emerald-300/30" /> : yearOtherCount}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-wide text-emerald-200/70">Other</p>
+                </div>
+              </div>
             </div>
-            <div className="rounded-md border border-emerald-400/15 bg-emerald-400/5 px-3 py-2 text-center">
-              <p className="text-base font-bold text-emerald-100 md:text-lg">
-                {state.isLoading ? <span className="inline-block h-5 w-8 animate-pulse rounded bg-emerald-300/30" /> : yearPrsCount}
-              </p>
-              <p className="text-[10px] uppercase tracking-wide text-emerald-200/70">PRs</p>
-            </div>
-            <div className="rounded-md border border-emerald-400/15 bg-emerald-400/5 px-3 py-2 text-center">
-              <p className="text-base font-bold text-emerald-100 md:text-lg">
-                {state.isLoading ? <span className="inline-block h-5 w-10 animate-pulse rounded bg-emerald-300/30" /> : yearOtherCount}
-              </p>
-              <p className="text-[10px] uppercase tracking-wide text-emerald-200/70">Other</p>
+
+            <div className="space-y-3">
+              <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+                <p className="text-[11px] uppercase tracking-wide text-white/70">Past month</p>
+                <p className="mt-1 text-2xl font-bold text-white">
+                  {state.isLoading ? <span className="inline-block h-6 w-16 animate-pulse rounded bg-white/20" /> : monthCount}
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+                <p className="text-[11px] uppercase tracking-wide text-white/70">Past week</p>
+                <p className="mt-1 text-2xl font-bold text-white">
+                  {state.isLoading ? <span className="inline-block h-6 w-14 animate-pulse rounded bg-white/20" /> : weekCount}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-
-        <div className="space-y-3">
-          <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-            <p className="text-[11px] uppercase tracking-wide text-white/70">Past month</p>
-            <p className="mt-1 text-2xl font-bold text-white">
-              {state.isLoading ? <span className="inline-block h-6 w-16 animate-pulse rounded bg-white/20" /> : monthCount}
-            </p>
-          </div>
-
-          <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-            <p className="text-[11px] uppercase tracking-wide text-white/70">Past week</p>
-            <p className="mt-1 text-2xl font-bold text-white">
-              {state.isLoading ? <span className="inline-block h-6 w-14 animate-pulse rounded bg-white/20" /> : weekCount}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+      </article>
+    </Link>
   );
 }
 
