@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import type { ElementType } from "react";
 import type { ProjectItem } from "./types";
 
 interface ProjectCardProps {
@@ -9,7 +10,7 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ item }: ProjectCardProps) {
-  const Wrapper = item.linkUrl ? Link : ("div" as any);
+  const Wrapper: ElementType = item.linkUrl ? Link : "div";
 
   return (
     <Wrapper
