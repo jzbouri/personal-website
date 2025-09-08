@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import { FaArrowUp } from "react-icons/fa6";
 import type React from "react";
 
@@ -24,10 +24,30 @@ export default function SoftwareNav() {
   const [shiftX, setShiftX] = useState<number>(0);
   const [isCompact, setIsCompact] = useState<boolean>(false);
   const [hasMounted, setHasMounted] = useState<boolean>(false);
+  const [enableShiftTransition, setEnableShiftTransition] = useState<boolean>(false);
   
 
   useEffect(() => {
     setHasMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setEnableShiftTransition(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  useLayoutEffect(() => {
+    const listEl = listRef.current;
+    const wrapperEl = listEl?.parentElement as HTMLElement | null;
+    if (!listEl || !wrapperEl) return;
+    const wrapperWidth = wrapperEl.clientWidth;
+    const listWidth = listEl.offsetWidth;
+    const leftover = Math.max(0, wrapperWidth - listWidth);
+    const compactNow = (window.innerWidth || 0) < 430;
+    const navTop = navRef.current?.getBoundingClientRect().top ?? 1;
+    const stuckNow = navTop <= 0;
+    const target = compactNow ? leftover / 2 : (stuckNow ? leftover : leftover / 2);
+    setShiftX(target);
   }, []);
 
   useEffect(() => {
@@ -217,13 +237,13 @@ export default function SoftwareNav() {
         <div className="flex-1 w-0 overflow-x-auto">
           <ul
             ref={listRef}
-            className={`relative flex w-max gap-1 rounded-full border border-white/10 bg-white/5 p-1 transition-opacity duration-300 ease-out ${hasMounted ? "opacity-100" : "opacity-0"}`}
+            className={`relative flex w-max gap-1 rounded-full border border-white/10 bg-white/5 p-1 ease-out ${hasMounted ? "opacity-100" : "opacity-0"} ${enableShiftTransition && !isCompact ? "transition-[opacity,transform]" : "transition-opacity"} duration-300 will-change-transform`}
             style={{ transform: `translateX(${shiftX}px)` }}
           >
             <div
               aria-hidden
-              className="pointer-events-none absolute top-0 left-0 h-full rounded-full border border-emerald-400/30 bg-emerald-400/20 transition-all duration-300 ease-out"
-              style={{ transform: `translateX(${indicator.x}px)`, width: indicator.width }}
+              className="pointer-events-none absolute top-0 left-0 h-full rounded-full border border-emerald-400/30 bg-emerald-400/20 duration-300 ease-out"
+              style={{ transform: `translateX(${indicator.x}px)`, width: indicator.width, transition: enableShiftTransition ? "transform 300ms ease-out, width 300ms ease-out" : "none" }}
             />
             {SECTIONS.map((section) => {
               const isActive = activeId === section.id;
