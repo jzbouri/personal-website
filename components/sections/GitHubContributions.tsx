@@ -169,11 +169,12 @@ export default function GitHubContributions({ login }: { login: string }) {
   const weekCount = useCountUp(state.week?.totalContributions, 400);
   const yearCommitsCount = useCountUp(state.year?.breakdown.commits, 400);
   const yearPrsCount = useCountUp(state.year?.breakdown.pullRequests, 400);
-  const yearOtherRaw =
-    (state.year?.breakdown.pullRequestReviews || 0) +
-    (state.year?.breakdown.issues || 0) +
-    (state.year?.breakdown.repositories || 0) +
-    (state.year?.breakdown.restricted || 0);
+  const yearOtherRaw = Math.max(
+    0,
+    (state.year?.totalContributions || 0) -
+      (state.year?.breakdown.commits || 0) -
+      (state.year?.breakdown.pullRequests || 0)
+  );
   const yearOtherCount = useCountUp(yearOtherRaw, 400);
 
   return (
