@@ -207,7 +207,7 @@ export default function GitHubContributions({ login }: { login: string }) {
               <p className="mt-1 text-3xl font-extrabold text-emerald-100">
                 {state.isLoading ? <span className="inline-block h-6 w-20 animate-pulse rounded bg-emerald-300/30" /> : yearCount}
               </p>
-              <div className="mt-auto pt-2 grid w-full max-w-[420px] grid-cols-3 gap-2 sm:max-w-[520px]">
+              <div className="mt-auto pt-2 grid w-full grid-cols-3 gap-2">
                 <div className="rounded-md border border-emerald-400/15 bg-emerald-400/5 px-3 py-2 text-center">
                   <p className="text-base font-bold text-emerald-100 md:text-lg">
                     {state.isLoading ? <span className="inline-block h-5 w-10 animate-pulse rounded bg-emerald-300/30" /> : yearCommitsCount}
