@@ -25,6 +25,7 @@ export default function SoftwareNav() {
   const [isCompact, setIsCompact] = useState<boolean>(false);
   const [hasMounted, setHasMounted] = useState<boolean>(false);
   const [enableShiftTransition, setEnableShiftTransition] = useState<boolean>(false);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
   
 
   useEffect(() => {
@@ -36,25 +37,18 @@ export default function SoftwareNav() {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  useLayoutEffect(() => {
-    const listEl = listRef.current;
-    const wrapperEl = listEl?.parentElement as HTMLElement | null;
-    if (!listEl || !wrapperEl) return;
-    const wrapperWidth = wrapperEl.clientWidth;
-    const listWidth = listEl.offsetWidth;
-    const leftover = Math.max(0, wrapperWidth - listWidth);
-    const compactNow = (window.innerWidth || 0) < 430;
-    const navTop = navRef.current?.getBoundingClientRect().top ?? 1;
-    const stuckNow = navTop <= 0;
-    const target = compactNow ? leftover / 2 : (stuckNow ? leftover : leftover / 2);
-    setShiftX(target);
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsStuck(!entry.isIntersecting);
+    }, { threshold: [0, 1] });
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
     const computeActive = () => {
-      const navTop = navRef.current?.getBoundingClientRect().top ?? 1;
-      setIsStuck(navTop <= 0);
-
       if (isAutoScrollingRef.current) return;
       const navHeight = navRef.current?.offsetHeight ?? 0;
       const scrollYWithOffset = window.scrollY + navHeight + 12;
@@ -211,13 +205,15 @@ export default function SoftwareNav() {
   };
 
   return (
-    <nav
-      ref={navRef}
-      className={"sticky top-0 z-40 py-2 mx-[calc(50%-50vw)] px-[calc(50vw-50%)]"}
-      onClick={handleNavClick}
-    >
-      <div className="pointer-events-none absolute inset-0 transition-opacity duration-300 ease-out" aria-hidden style={{ opacity: isStuck ? 1 : 0 }}>
-        <div className="h-full w-full bg-gradient-to-b from-black/95 via-black/95 to-black/95 border-b border-white/10 shadow-lg shadow-black/30 backdrop-blur-sm" />
+    <>
+      <div ref={sentinelRef} aria-hidden className="h-px w-px" />
+      <nav
+        ref={navRef}
+        className={"sticky top-0 z-40 py-2 mx-[calc(50%-50vw)] px-[calc(50vw-50%)]"}
+        onClick={handleNavClick}
+      >
+      <div className="pointer-events-none absolute inset-0 transition-opacity duration-300 ease-out" aria-hidden style={{ opacity: isStuck ? 1 : 0, transform: "translateZ(0)", willChange: "opacity, transform", backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}>
+        <div className="h-full w-full bg-gradient-to-b from-black/95 via-black/95 to-black/95 border-b border-white/10 shadow-lg shadow-black/30 backdrop-blur-sm" style={{ transform: "translateZ(0)", willChange: "opacity, transform", backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }} />
       </div>
       <div className="relative z-10 flex items-center gap-2 px-4 min-h-12">
         {!isCompact && (
@@ -267,7 +263,8 @@ export default function SoftwareNav() {
           </ul>
         </div>
       </div>
-    </nav>
+      </nav>
+    </>
   );
 }
 
