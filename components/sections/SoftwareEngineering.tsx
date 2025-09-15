@@ -48,7 +48,7 @@ const experiences: ExperienceItem[] = [
     companyLogoSrc: "/shipd_logo.jpeg",
     companyDescription: "A platform that allows users to create and solve unique data structures and algorithms problems",
     startDate: "Sept 2024",
-    endDate: "August 2024",
+    endDate: "December 2024",
     roleDescription: "Created and solved data structures and algorithms questions in Typescript, Python and Java, which were sold to AI companies as training data.",
     companyUrl: "https://shipd.ai/",
     location: "Remote, company based in San Francisco, CA 🇺🇸",
