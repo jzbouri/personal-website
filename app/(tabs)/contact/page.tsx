@@ -1,11 +1,8 @@
 "use client";
+import Contact from "@/components/sections/Contact";
 
 export default function ContactPage() {
-  return (
-    <section className="space-y-3">
-      <p className="text-white/60">Coming soon.</p>
-    </section>
-  );
+  return <Contact />;
 }
 
 
