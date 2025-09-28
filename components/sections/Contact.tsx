@@ -11,6 +11,10 @@ export default function Contact() {
     { link: "https://x.com/jzbouri", label: "X", value: "@jzbouri" },
     { link: "https://discord.com", label: "Discord", value: "jalal4662" },
     { link: "https://www.linkedin.com/in/jalal-bouri", label: "LinkedIn", value: "jalal-bouri" },
+    { link: "https://github.com/jzbouri", label: "GitHub", value: "jzbouri" },
+    { link: "https://www.strava.com/athletes/56842043", label: "Strava", value: "56842043" },
+    { link: "https://open.spotify.com/user/aqxyzyqukhns1qtu04uji0os5", label: "Spotify", value: "aqxyzyqukhns1qtu04uji0os5" },
+    { link: "https://www.last.fm/user/tubulant_lemon", label: "Last.fm", value: "tubulant_lemon" },
   ];
 
   return (
