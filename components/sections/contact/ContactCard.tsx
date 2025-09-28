@@ -29,7 +29,11 @@ function Icon({ label }: { label: string }) {
 }
 
 export default function ContactCard({ item, copied, onCopy }: { item: ContactItem; copied: boolean; onCopy: (value: string) => void; }) {
-  const content = (
+  const isHttp = useIsHttp();
+  const href = item.link || (item.label === "Discord" ? "https://discord.com" : undefined);
+  const external = isHttp(href);
+
+  const article = (
     <article className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-4 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.03] group focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
       <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden>
         <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_0%_0%,rgba(96,165,250,0.16),transparent_60%),radial-gradient(120%_120%_at_100%_100%,rgba(34,211,238,0.16),transparent_60%),radial-gradient(140%_140%_at_100%_0%,rgba(192,132,252,0.16),transparent_60%)]" />
@@ -45,13 +49,41 @@ export default function ContactCard({ item, copied, onCopy }: { item: ContactIte
           </div>
         </div>
         <div className="shrink-0">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-1 text-xs font-semibold text-emerald-200">
-            {copied ? <FiCheck className="h-4 w-4" aria-hidden /> : <FiCopy className="h-4 w-4" aria-hidden />}<span>{copied ? "Copied" : "Copy"}</span>
-          </span>
+          <button
+            type="button"
+            aria-label={`Copy ${item.label} value`}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              item.onClick?.();
+              if (typeof navigator !== "undefined" && navigator.clipboard) {
+                navigator.clipboard.writeText(item.value).catch(() => {});
+              }
+              onCopy(item.value);
+            }}
+            className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-1 text-xs font-semibold text-emerald-200 hover:bg-emerald-400/20"
+          >
+            {copied ? <FiCheck className="h-4 w-4" aria-hidden /> : <FiCopy className="h-4 w-4" aria-hidden />}
+            <span>{copied ? "Copied" : "Copy"}</span>
+          </button>
         </div>
       </div>
     </article>
   );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
+        aria-label={`${item.label}: ${item.value}`}
+        className="block group"
+      >
+        {article}
+      </a>
+    );
+  }
 
   return (
     <button
@@ -66,7 +98,7 @@ export default function ContactCard({ item, copied, onCopy }: { item: ContactIte
       }}
       className="block w-full text-left"
     >
-      {content}
+      {article}
     </button>
   );
 }
