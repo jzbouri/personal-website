@@ -26,3 +26,8 @@ p {
 .font-brand-mono {
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
 }
+
+@keyframes marquee {
+  from { transform: translateX(0%) }
+  to { transform: translateX(-50%) }
+}
