@@ -13,7 +13,7 @@ export default function TabsLayout({
   const activeId = useMemo(() => {
     if (pathname.startsWith("/athletics")) return "athletics";
     if (pathname.startsWith("/music")) return "music";
-    if (pathname.startsWith("/life")) return "life";
+    if (pathname.startsWith("/contact")) return "contact";
     return "software";
   }, [pathname]);
 
@@ -25,7 +25,7 @@ export default function TabsLayout({
         return "Athlete";
       case "music":
         return "Music enjoyer";
-      case "life":
+      case "contact":
         return "Chill guy";
       default:
         return "Software engineer";
@@ -48,9 +48,10 @@ export default function TabsLayout({
           { label: "Spotify", href: "https://open.spotify.com/user/aqxyzyqukhns1qtu04uji0os5" },
           { label: "Last.fm", href: "https://www.last.fm/user/tubulant_lemon" },
         ];
-      case "life":
+      case "contact":
         return [
-          { label: "Instagram", href: "https://instagram.com/jalalbouri" },
+          { label: "Phone", href: "tel:+16479849959" },
+          { label: "Email", href: "mailto:jz.bouri@gmail.com" },
         ];
       default:
         return [];
@@ -61,7 +62,7 @@ export default function TabsLayout({
     { id: "software", label: "Software Engineering", href: "/software" },
     { id: "athletics", label: "Athletics", href: "/athletics" },
     { id: "music", label: "Music", href: "/music" },
-    { id: "life", label: "Life", href: "/life" },
+    { id: "contact", label: "Contact", href: "/contact" },
   ];
 
   return (
