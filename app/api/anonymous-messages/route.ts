@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { randomUUID as nodeRandomUUID } from "crypto";
+import twilio from "twilio";
 import { createAdminClient } from "@/utils/supabase/admin";
 
 function json(data: unknown, init?: number | ResponseInit) {
@@ -27,18 +28,9 @@ async function sendSmsNotification(bodyText: string): Promise<void> {
   const to = process.env.TWILIO_TO_NUMBER;
   if (!sid || !token || !from || !to) return;
 
-  const auth = Buffer.from(`${sid}:${token}`).toString("base64");
-  const params = new URLSearchParams({ From: from, To: to, Body: bodyText });
-
   try {
-    await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${auth}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: params,
-    });
+    const client = twilio(sid, token);
+    await client.messages.create({ from, to, body: bodyText });
   } catch (error) {
     console.error("Error sending SMS. ", error);
   }
@@ -58,6 +50,8 @@ function formatSms({ message, ip, userAgent, tsISO }: { message: string; ip: str
   ];
   return lines.join("\n");
 }
+
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   try {
