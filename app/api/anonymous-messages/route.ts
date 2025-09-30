@@ -20,25 +20,6 @@ function getHeaderIP(req: NextRequest): string | null {
   return ip && ip.length > 0 ? ip : null;
 }
 
-function detectOS(userAgent: string): string | null {
-  const ua = (userAgent || "").toLowerCase();
-  if (/windows nt|win64|win32/.test(ua)) return "Windows";
-  if (/mac os x|macintosh/.test(ua)) return "macOS";
-  if (/iphone|ipad|ipod|ios/.test(ua)) return "iOS";
-  if (/android/.test(ua)) return "Android";
-  if (/cros|chrome os/.test(ua)) return "Chrome OS";
-  if (/linux/.test(ua)) return "Linux";
-  return null;
-}
-
-function detectDeviceType(userAgent: string): "Mobile" | "Tablet" | "Desktop" | "Unknown" {
-  const ua = (userAgent || "").toLowerCase();
-  if (/ipad|tablet/.test(ua)) return "Tablet";
-  if (/mobi|iphone|android/.test(ua)) return "Mobile";
-  if (ua) return "Desktop";
-  return "Unknown";
-}
-
 export async function POST(req: NextRequest) {
   try {
     const supabase = createAdminClient();
@@ -50,9 +31,7 @@ export async function POST(req: NextRequest) {
     if (message.length > 500) return json({ error: "Message too long" }, 400);
 
     const headerIp = getHeaderIP(req);
-    const ua = req.headers.get("user-agent") || "";
-    const os = detectOS(ua);
-    const deviceType = detectDeviceType(ua);
+    const userAgent = req.headers.get("user-agent");
 
     const uuid = (typeof nodeRandomUUID === "function")
       ? nodeRandomUUID()
@@ -64,8 +43,7 @@ export async function POST(req: NextRequest) {
       uuid,
       message,
       ip: headerIp,
-      os,
-      device_type: deviceType,
+      user_agent: userAgent ?? null,
     } as const;
 
     const { data, error } = await supabase
