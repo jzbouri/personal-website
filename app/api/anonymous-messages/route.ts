@@ -39,8 +39,8 @@ async function sendSmsNotification(bodyText: string): Promise<void> {
       },
       body: params,
     });
-  } catch {
-    console.error("Error sending SMS");
+  } catch (error) {
+    console.error("Error sending SMS. ", error);
   }
 }
 
