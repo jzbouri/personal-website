@@ -1,82 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FiLoader, FiSend } from "react-icons/fi";
 
-type DeviceType = "Mobile" | "Tablet" | "Desktop" | "Unknown";
-
-type Meta = {
-  ip: string | null;
-  os: string | null;
-  deviceType: DeviceType;
-};
-
-function useClientInfo() {
-  const [meta, setMeta] = useState<Meta>({ ip: null, os: null, deviceType: "Unknown" });
-
-  useEffect(() => {
-    let aborted = false;
-
-    function detectOS(userAgent: string, platformHint?: string | null): string | null {
-      const ua = userAgent.toLowerCase();
-      const plat = (platformHint || "").toLowerCase();
-      if (/windows nt|win64|win32/.test(ua) || /windows/.test(plat)) return "Windows";
-      if (/mac os x|macintosh/.test(ua) || /mac/.test(plat)) return "macOS";
-      if (/iphone|ipad|ipod|ios/.test(ua) || /ios/.test(plat)) return "iOS";
-      if (/android/.test(ua)) return "Android";
-      if (/cros/.test(ua) || /chrome os/.test(plat)) return "Chrome OS";
-      if (/linux/.test(ua) || /linux/.test(plat)) return "Linux";
-      return null;
-    }
-
-    function detectDeviceType(userAgent: string, isMobileHint?: boolean): DeviceType {
-      if (typeof isMobileHint === "boolean") return isMobileHint ? "Mobile" : "Desktop";
-      const ua = userAgent.toLowerCase();
-      if (/ipad|tablet/.test(ua)) return "Tablet";
-      if (/mobi|iphone|android/.test(ua)) return "Mobile";
-      return "Desktop";
-    }
-
-    const nav: Navigator | undefined = typeof navigator !== "undefined" ? navigator : undefined;
-    const ua = nav?.userAgent || "";
-    const uaData = (nav
-      ? (nav as unknown as { userAgentData?: { mobile?: boolean; platform?: string } }).userAgentData
-      : undefined);
-
-    const os = detectOS(ua, uaData?.platform ?? null);
-    const deviceType = detectDeviceType(ua, uaData?.mobile);
-
-    setMeta((m) => ({ ...m, os, deviceType }));
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 6000);
-
-    fetch("https://api.ipify.org?format=json", { signal: controller.signal })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("ipify: bad response"))))
-      .then((data: { ip?: string }) => {
-        if (!aborted) setMeta((m) => ({ ...m, ip: data?.ip ?? null }));
-      })
-      .catch(() => {
-        if (!aborted) setMeta((m) => ({ ...m, ip: null }));
-      })
-      .finally(() => clearTimeout(timeoutId));
-
-    return () => {
-      aborted = true;
-      clearTimeout(timeoutId);
-      controller.abort();
-    };
-  }, []);
-
-  return meta;
-}
 
 export default function AnonymousMessageForm() {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const meta = useClientInfo();
 
   const maxChars = 500;
   const remaining = useMemo(() => maxChars - message.length, [message]);
@@ -89,27 +21,28 @@ export default function AnonymousMessageForm() {
     setStatus("idle");
     setErrorMsg(null);
 
-    const payload = {
-      message: message.trim(),
-      ip: meta.ip,
-      os: meta.os,
-      deviceType: meta.deviceType,
-    };
+    const payload = { message: message.trim() };
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 700));
-      if (typeof window !== "undefined") {
-        console.log("Anonymous message payload", payload);
+      const res = await fetch("/api/anonymous-messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!res.ok || data?.ok !== true) {
+        throw new Error(data?.error || `Request failed (${res.status})`);
       }
       setStatus("success");
       setMessage("");
     } catch (err) {
       setStatus("error");
-      setErrorMsg("Something went wrong. Please try again.");
+      const m = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setErrorMsg(m);
     } finally {
       setSubmitting(false);
     }
-  }, [canSubmit, message, meta]);
+  }, [canSubmit, message]);
 
   return (
     <form onSubmit={handleSubmit} className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-4 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.03] focus-within:border-white/20">
