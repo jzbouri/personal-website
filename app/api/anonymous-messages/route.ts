@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { randomUUID as nodeRandomUUID } from "crypto";
 import { createAdminClient } from "@/utils/supabase/admin";
 
 function json(data: unknown, init?: number | ResponseInit) {
@@ -53,10 +54,14 @@ export async function POST(req: NextRequest) {
     const os = detectOS(ua);
     const deviceType = detectDeviceType(ua);
 
+    const uuid = (typeof nodeRandomUUID === "function")
+      ? nodeRandomUUID()
+      : (typeof globalThis !== "undefined" && typeof (globalThis.crypto as Crypto | undefined)?.randomUUID === "function")
+        ? (globalThis.crypto as Crypto).randomUUID()
+        : `${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
+
     const row = {
-      uuid: (typeof crypto !== "undefined" && typeof (crypto as any).randomUUID === "function")
-        ? (crypto as any).randomUUID()
-        : Math.random().toString(36).slice(2) + Date.now().toString(36),
+      uuid,
       message,
       ip: headerIp,
       os,
@@ -72,7 +77,7 @@ export async function POST(req: NextRequest) {
     if (error) return json({ error: "an error occured" }, 500);
 
     return json({ ok: true, id: data?.[0]?.uuid ?? null }, 200);
-  } catch (error) {
+  } catch {
     return json({ error: "an error occured" }, 500);
   }
 }
