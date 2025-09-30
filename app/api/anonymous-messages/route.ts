@@ -20,6 +20,45 @@ function getHeaderIP(req: NextRequest): string | null {
   return ip && ip.length > 0 ? ip : null;
 }
 
+async function sendSmsNotification(bodyText: string): Promise<void> {
+  const sid = process.env.TWILIO_ACCOUNT_SID;
+  const token = process.env.TWILIO_AUTH_TOKEN;
+  const from = process.env.TWILIO_FROM_NUMBER;
+  const to = process.env.TWILIO_TO_NUMBER;
+  if (!sid || !token || !from || !to) return;
+
+  const auth = Buffer.from(`${sid}:${token}`).toString("base64");
+  const params = new URLSearchParams({ From: from, To: to, Body: bodyText });
+
+  try {
+    await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${auth}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: params,
+    });
+  } catch {
+    console.error("Error sending SMS");
+  }
+}
+
+function formatSms({ message, ip, userAgent, tsISO }: { message: string; ip: string | null; userAgent: string | null; tsISO: string; }): string {
+  const lines = [
+    "New anonymous message:",
+    "",
+    message,
+    "",
+    `Time: ${tsISO}`,
+    "",
+    `IP: ${ip ?? "unknown"}`,
+    "",
+    `UA: ${userAgent ?? "unknown"}`,
+  ];
+  return lines.join("\n");
+}
+
 export async function POST(req: NextRequest) {
   try {
     const supabase = createAdminClient();
@@ -54,7 +93,13 @@ export async function POST(req: NextRequest) {
 
     if (error) return json({ error: "an error occured" }, 500);
 
-    return json({ ok: true, id: data?.[0]?.uuid ?? null }, 200);
+    const response = json({ ok: true, id: data?.[0]?.uuid ?? null }, 200);
+
+    const tsISO = new Date().toISOString();
+    const smsBody = formatSms({ message, ip: headerIp, userAgent: userAgent ?? null, tsISO });
+    void sendSmsNotification(smsBody);
+
+    return response;
   } catch {
     return json({ error: "an error occured" }, 500);
   }
