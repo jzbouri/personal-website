@@ -233,7 +233,7 @@ export default function SoftwareNav() {
         <div className="flex-1 w-0 overflow-x-auto">
           <ul
             ref={listRef}
-            className={`relative flex w-max gap-1 rounded-full border border-white/10 bg-white/5 p-1 ease-out ${hasMounted ? "opacity-100" : "opacity-0"} ${enableShiftTransition && !isCompact ? "transition-[opacity,transform]" : "transition-opacity"} duration-300 will-change-transform`}
+            className={`relative flex w-max gap-1 rounded-full border border-white/10 bg-[var(--surface-3)] hover:bg-[var(--surface-4)] p-1 ease-out ${hasMounted ? "opacity-100" : "opacity-0"} ${enableShiftTransition && !isCompact ? "transition-[opacity,transform]" : "transition-opacity"} duration-300 will-change-transform`}
             style={{ transform: `translateX(${shiftX}px)` }}
           >
             <div

@@ -11,7 +11,7 @@ interface ExperienceCardProps {
 export default function ExperienceCard({ item }: ExperienceCardProps) {
   return (
     <Link href={item.companyUrl} target="_blank" rel="noreferrer noopener" aria-label={`Visit ${item.companyName} website`} className="group block h-full rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40">
-      <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-4 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.03] sm:p-5 cursor-pointer">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[var(--surface-1)] p-4 transition-all duration-300 hover:border-white/20 hover:bg-[var(--surface-2)] sm:p-5 cursor-pointer">
         <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden>
           <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_0%_0%,rgba(96,165,250,0.16),transparent_60%),radial-gradient(120%_120%_at_100%_100%,rgba(34,211,238,0.16),transparent_60%),radial-gradient(140%_140%_at_100%_0%,rgba(192,132,252,0.16),transparent_60%)]" />
         </div>

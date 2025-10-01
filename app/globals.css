@@ -3,6 +3,12 @@
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --surface-1: #0f0f0f;
+  --surface-2: #111111;
+  --surface-3: #161616;
+  --surface-4: #191919;
+  --surface-5: #232323;
+  --surface-6: #272727;
 }
 
 body {
