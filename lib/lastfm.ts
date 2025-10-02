@@ -63,6 +63,10 @@ export class LastFmClient {
   getTopArtists(args: { user: string; period?: TopArtistsPeriod; limit?: number; page?: number; }) {
     return this.request<unknown>("user.gettopartists", args);
   }
+
+  getTopAlbums(args: { user: string; period?: TopArtistsPeriod; limit?: number; page?: number; }) {
+    return this.request<unknown>("user.gettopalbums", args);
+  }
 }
 
 export function createLastFmClient(options: LastFmClientOptions = {}) {
