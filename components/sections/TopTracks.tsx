@@ -9,7 +9,7 @@ type Track = {
   url: string;
   playcount?: string | number;
   artist?: { name?: string; url?: string } | string;
-  album?: { name?: string; [key: string]: unknown } | string;
+  album?: { name?: string; ["#text"]?: string } | string;
   ["@attr"]?: { rank?: string };
 };
 
@@ -70,6 +70,12 @@ export default function TopTracks({ user = "tubulant_lemon", limit = 10 }: { use
       document.removeEventListener("keydown", onKey);
     };
   }, []);
+
+  function getAlbumName(input: Track["album"]): string {
+    if (!input) return "";
+    if (typeof input === "string") return input;
+    return input.name || input["#text"] || "";
+  }
 
   return (
     <section className="space-y-3">
@@ -132,8 +138,7 @@ export default function TopTracks({ user = "tubulant_lemon", limit = 10 }: { use
           {tracks.slice(0, limit).map((t, idx) => {
             const rank = t?.["@attr"]?.rank || String(idx + 1);
             const artist = typeof t.artist === "string" ? (t.artist as string) : (t.artist?.name || "");
-            const albumField = (t as unknown as { album?: { name?: string; [k: string]: unknown } | string }).album;
-            const album = typeof albumField === "string" ? albumField : (albumField?.name || (albumField as any)?.["#text"] || "");
+            const album = getAlbumName(t.album);
             const playsNum = Number(typeof t.playcount === "string" ? t.playcount : t.playcount ?? 0);
             const maxPlays = Number(typeof tracks[0]?.playcount === "string" ? tracks[0]?.playcount : tracks[0]?.playcount ?? playsNum);
             const widthPct = idx === 0 ? 100 : Math.min(100, maxPlays ? (playsNum / maxPlays) * 100 : 0);
