@@ -140,7 +140,6 @@ export default function TopAlbums({ user = "tubulant_lemon", limit = 5 }: { user
         <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-red-200 text-sm">{error}</div>
       ) : albums && albums.length ? (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {/* Left big square - top album */}
           {(() => {
             const album = albums[0];
             const img = pickImage(album?.image);
@@ -171,7 +170,6 @@ export default function TopAlbums({ user = "tubulant_lemon", limit = 5 }: { user
             );
           })()}
 
-          {/* Right 2x2 grid for next four albums */}
           <div>
             <div className="grid grid-cols-2 gap-3">
               {albums.slice(1, 5).map((album, idx) => {
