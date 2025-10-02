@@ -12,6 +12,14 @@ export interface LastFmRequestParams {
   [key: string]: string | number | boolean | undefined;
 }
 
+export type TopArtistsPeriod =
+  | "overall"
+  | "7day"
+  | "1month"
+  | "3month"
+  | "6month"
+  | "12month";
+
 export class LastFmClient {
   private readonly apiKey: string;
   private readonly sharedSecret?: string;
@@ -50,6 +58,10 @@ export class LastFmClient {
 
   getRecentTracks(args: { user: string; limit?: number; page?: number; from?: number; to?: number; extended?: 0 | 1; }) {
     return this.request<unknown>("user.getrecenttracks", args);
+  }
+
+  getTopArtists(args: { user: string; period?: TopArtistsPeriod; limit?: number; page?: number; }) {
+    return this.request<unknown>("user.gettopartists", args);
   }
 }
 
