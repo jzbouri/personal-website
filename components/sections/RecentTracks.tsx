@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type LastFmRecentTracks = {
   recenttracks?: {
-    track?: Array<any>;
+    track?: Array<Track>;
     [key: string]: unknown;
   };
 };
@@ -68,8 +68,6 @@ export default function RecentTracks({ user = "tubulant_lemon" }: { user?: strin
     load();
     return () => { isCancelled = true; };
   }, [user]);
-
-  const nowPlaying = useMemo(() => tracks?.[0]?.["@attr"]?.nowplaying === "true", [tracks]);
 
   return (
     <section className="space-y-3">
