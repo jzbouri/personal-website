@@ -82,7 +82,6 @@ export default function TopArtists({ user = "tubulant_lemon", limit = 6 }: { use
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-sm font-semibold text-white/90 font-brand-mono">Top Artists</h3>
         <div className="inline-flex items-center gap-2 text-sm text-white/70" ref={dropdownRef}>
-          <span>Timeframe</span>
           <div className="relative">
             <button
               type="button"
@@ -113,7 +112,7 @@ export default function TopArtists({ user = "tubulant_lemon", limit = 6 }: { use
                         className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-white/90 transition-colors ${isActive ? "bg-white/10" : "hover:bg-white/5"}`}
                       >
                         <span>{p.label}</span>
-                        {isActive ? <span className="text-xs text-white/60">✓</span> : null}
+                        {isActive ? <span className="inline-block h-1.5 w-1.5 rounded-full bg-white/60" /> : null}
                       </button>
                     </li>
                   );

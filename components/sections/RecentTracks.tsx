@@ -71,6 +71,7 @@ export default function RecentTracks({ user = "tubulant_lemon" }: { user?: strin
 
   return (
     <section className="space-y-3">
+      <h3 className="text-sm font-semibold text-white/90 font-brand-mono">Recent tracks</h3>
       {isLoading ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-2">
           {Array.from({ length: 6 }).map((_, i) => (
