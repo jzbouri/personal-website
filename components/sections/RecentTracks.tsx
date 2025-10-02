@@ -105,7 +105,7 @@ export default function RecentTracks({ user = "tubulant_lemon" }: { user?: strin
                       <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_0%_0%,rgba(96,165,250,0.16),transparent_60%),radial-gradient(120%_120%_at_100%_100%,rgba(34,211,238,0.16),transparent_60%),radial-gradient(140%_140%_at_100%_0%,rgba(192,132,252,0.16),transparent_60%)]" />
                     </div>
                     {isNow ? (
-                      <div className="absolute right-3 top-3 z-10 rounded-full bg-emerald-400/20 px-2 py-0.5 text-[10px] font-semibold text-emerald-200 border border-emerald-400/40 flex items-center gap-1">
+                      <div className="pointer-events-none absolute right-3 top-3 z-10 rounded-full bg-emerald-400/20 px-2 py-0.5 text-[10px] font-semibold text-emerald-200 border border-emerald-400/40 flex items-center gap-1">
                         <span className="eq-bar eq-1" />
                         <span className="eq-bar eq-2" />
                         <span className="eq-bar eq-3" />
@@ -120,7 +120,7 @@ export default function RecentTracks({ user = "tubulant_lemon" }: { user?: strin
                           <div className="flex h-full w-full items-center justify-center text-xs text-white/40">No Art</div>
                         )}
                       </div>
-                      <div className="min-w-0 flex-1">
+                      <div className={`min-w-0 flex-1${isNow ? " pr-16 sm:pr-20" : ""}`}>
                         <div className="flex items-baseline gap-2">
                           <h4 className="truncate text-base font-semibold leading-tight tracking-tight text-white font-brand-mono">{t.name}</h4>
                         </div>
