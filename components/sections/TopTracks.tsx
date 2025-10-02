@@ -166,7 +166,7 @@ export default function TopTracks({ user = "tubulant_lemon", limit = 10 }: { use
                         </p>
                         <div className="mt-2 flex items-center gap-3">
                           <div className="relative h-2 w-full overflow-hidden rounded bg-white/10">
-                            <div className="h-full bg-rose-300/40" style={{ width: `${widthPct}%` }} />
+                            <div className="h-full bg-emerald-300/50 transition-[width] duration-300" style={{ width: `${widthPct}%` }} />
                           </div>
                           <span className="shrink-0 text-xs text-white/60">{playsNum} plays</span>
                         </div>
