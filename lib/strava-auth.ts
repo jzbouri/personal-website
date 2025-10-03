@@ -15,8 +15,7 @@ export interface StravaAuthRow {
   refresh_token: string;
   expires_at: number;
   expires_in: number;
-  created_at?: string;
-  updated_at?: string;
+  token_type?: string;
 }
 
 interface TokenRefreshResponse {
@@ -63,7 +62,6 @@ async function updateTokensInDb(tokens: StravaTokens): Promise<void> {
       refresh_token: tokens.refresh_token,
       expires_at: tokens.expires_at,
       expires_in: tokens.expires_in,
-      updated_at: new Date().toISOString(),
     })
     .eq("id", existing.id);
 
