@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { FaArrowUp } from "react-icons/fa6";
 import type React from "react";
 
@@ -23,13 +23,33 @@ export default function SoftwareNav() {
   const [isStuck, setIsStuck] = useState<boolean>(false);
   const [shiftX, setShiftX] = useState<number>(0);
   const [isCompact, setIsCompact] = useState<boolean>(false);
-  const [hasMounted, setHasMounted] = useState<boolean>(false);
   const [enableShiftTransition, setEnableShiftTransition] = useState<boolean>(false);
+  const [isReady, setIsReady] = useState<boolean>(false);
+  const hasComputedInitialShift = useRef<boolean>(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   
 
-  useEffect(() => {
-    setHasMounted(true);
+  useLayoutEffect(() => {
+    if (hasComputedInitialShift.current) return;
+    const computeShift = () => {
+      const listEl = listRef.current;
+      const wrapperEl = listEl?.parentElement as HTMLElement | null;
+      if (!listEl || !wrapperEl) return;
+      const wrapperWidth = wrapperEl.clientWidth;
+      const listWidth = listEl.offsetWidth;
+      const leftover = Math.max(0, wrapperWidth - listWidth);
+      const vw = window.innerWidth || 0;
+      const compact = vw < 430;
+      const target = compact ? (leftover / 2) : leftover / 2;
+      setShiftX(target);
+      setIsCompact(compact);
+      hasComputedInitialShift.current = true;
+      setIsReady(true);
+    };
+    computeShift();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setEnableShiftTransition(true));
+    });
   }, []);
 
   useEffect(() => {
@@ -181,16 +201,28 @@ export default function SoftwareNav() {
     const startTime = performance.now();
     const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    isAutoScrollingRef.current = true;
+    
     const step = (now: number) => {
       const elapsed = now - startTime;
       const progress = Math.min(1, elapsed / duration);
       const eased = easeInOutCubic(progress);
       window.scrollTo({ top: startY + delta * eased });
+      
+      // Update active section during scroll
+      const navHeight = navRef.current?.offsetHeight ?? 0;
+      const scrollYWithOffset = (startY + delta * eased) + navHeight + 12;
+      let currentId: SectionId = SECTIONS[0].id;
+      for (const s of SECTIONS) {
+        const el = document.getElementById(s.id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        if (scrollYWithOffset >= top - 2) currentId = s.id;
+      }
+      setActiveId(currentId);
+      
       if (progress < 1) {
         rafRef.current = requestAnimationFrame(step);
       } else {
-        isAutoScrollingRef.current = false;
         setActiveId(SECTIONS[0].id);
       }
     };
@@ -233,8 +265,8 @@ export default function SoftwareNav() {
         <div className="flex-1 w-0 overflow-x-auto">
           <ul
             ref={listRef}
-            className={`relative flex w-max gap-1 rounded-full border border-white/10 bg-[var(--surface-3)] hover:bg-[var(--surface-4)] p-1 ease-out ${hasMounted ? "opacity-100" : "opacity-0"} ${enableShiftTransition && !isCompact ? "transition-[opacity,transform]" : "transition-opacity"} duration-300 will-change-transform`}
-            style={{ transform: `translateX(${shiftX}px)` }}
+            className={`relative flex w-max gap-1 rounded-full border border-white/10 bg-[var(--surface-3)] hover:bg-[var(--surface-4)] p-1 ease-out ${enableShiftTransition && !isCompact ? "transition-transform duration-300" : ""} will-change-transform`}
+            style={{ transform: `translateX(${shiftX}px)`, visibility: isReady ? 'visible' : 'hidden' }}
           >
             <div
               aria-hidden
