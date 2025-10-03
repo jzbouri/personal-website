@@ -23,7 +23,7 @@ export default function Header({ subtitle, links = [] }: HeaderProps) {
   };
 
   return (
-    <header className="relative mb-6 overflow-hidden rounded-2xl border border-white/10 bg-[var(--surface-1)] p-6 hover:bg-[var(--surface-2)] transition-colors">
+    <header className="relative mb-6 overflow-hidden rounded-2xl border border-white/10 bg-[var(--surface-1)] p-6">
       <div className="pointer-events-none absolute inset-0 opacity-70" aria-hidden>
         <div className="absolute inset-0 bg-[radial-gradient(120%_120%_at_0%_0%,rgba(96,165,250,0.16),transparent_60%),radial-gradient(120%_120%_at_100%_100%,rgba(34,211,238,0.14),transparent_60%),radial-gradient(140%_140%_at_100%_0%,rgba(192,132,252,0.18),transparent_60%)]" />
       </div>

@@ -183,7 +183,7 @@ export default function RaceResultsTable() {
                 <Th label="Pace" active={sortKey === "pace"} dir={sortDir} onClick={() => toggleSort("pace")} />
                 <Th label="Place" active={sortKey === "place"} dir={sortDir} onClick={() => toggleSort("place")} />
                 <Th label="Participants" active={sortKey === "participants"} dir={sortDir} onClick={() => toggleSort("participants")} />
-                <Th label="Percentile" active={sortKey === "percent"} dir={sortDir} onClick={() => toggleSort("percent")} />
+                <Th label="Relative Place" active={sortKey === "percent"} dir={sortDir} onClick={() => toggleSort("percent")} />
               </tr>
             </thead>
             <tbody>
