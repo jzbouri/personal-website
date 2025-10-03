@@ -52,6 +52,11 @@ export class StravaClient {
   getAthleteStats(athleteId: number) {
     return this.request<unknown>(`/athletes/${athleteId}/stats`);
   }
+
+  async getLatestActivity<T = unknown>(): Promise<T | null> {
+    const activities = await this.request<T[]>(`/athlete/activities?per_page=1&page=1`);
+    return activities?.length ? activities[0] : null;
+  }
 }
 
 export function createStravaClient(options: StravaClientOptions = {}) {
