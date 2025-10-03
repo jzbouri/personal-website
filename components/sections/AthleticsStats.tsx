@@ -154,11 +154,9 @@ export default function AthleticsStats() {
       {isLoading ? (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="rounded-2xl border border-white/10 bg-[var(--surface-1)] p-4">
-              <div className="h-5 w-1/3 rounded bg-white/10 animate-pulse" />
-              <div className="mt-4 h-8 w-2/3 rounded bg-white/10 animate-pulse" />
-              <div className="mt-2 h-3 w-1/2 rounded bg-white/10 animate-pulse" />
-              <div className="mt-2 h-3 w-1/3 rounded bg-white/10 animate-pulse" />
+            <div key={i} className="rounded-2xl border border-white/10 bg-[var(--surface-1)] p-4 sm:p-5">
+              <div className="h-4 w-1/3 rounded bg-white/10 animate-pulse" />
+              <div className="mt-2 h-9 w-2/3 rounded bg-white/10 animate-pulse" />
             </div>
           ))}
         </div>

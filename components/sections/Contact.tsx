@@ -1,7 +1,7 @@
 "use client";
 
 import ContactList from "./contact/ContactList";
-import dynamic from "next/dynamic";
+import AnonymousMessageForm from "./contact/AnonymousMessageForm";
 import type { ContactItem } from "./contact/types";
 
 export default function Contact() {
@@ -17,8 +17,6 @@ export default function Contact() {
     { link: "https://open.spotify.com/user/aqxyzyqukhns1qtu04uji0os5", label: "Spotify", value: "aqxyzyqukhns1qtu04uji0os5" },
     { link: "https://www.last.fm/user/tubulant_lemon", label: "Last.fm", value: "tubulant_lemon" },
   ];
-
-  const AnonymousMessageForm = dynamic(() => import("./contact/AnonymousMessageForm"), { ssr: false });
 
   return (
     <section className="space-y-4">

@@ -121,12 +121,15 @@ export default function TopTracks({ user = "tubulant_lemon", limit = 10 }: { use
           {Array.from({ length: limit }).map((_, i) => (
             <li key={i} className="rounded-2xl border border-white/10 bg-[var(--surface-1)] p-3 sm:p-4">
               <div className="flex items-center gap-3">
-                <div className="h-6 w-6 rounded bg-white/10 animate-pulse" />
-                <div className="min-w-0 flex-1">
-                  <div className="h-4 w-2/3 rounded bg-white/10 animate-pulse" />
-                  <div className="mt-2 h-2 w-1/2 rounded bg-white/10 animate-pulse" />
+                <div className="h-8 w-8 shrink-0 rounded-md bg-white/10 animate-pulse" />
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="h-5 w-2/3 rounded bg-white/10 animate-pulse" />
+                  <div className="h-4 w-1/2 rounded bg-white/10 animate-pulse" />
+                  <div className="mt-2 flex items-center gap-3">
+                    <div className="h-2 w-full rounded bg-white/10 animate-pulse" />
+                    <div className="h-3 w-16 shrink-0 rounded bg-white/10 animate-pulse" />
+                  </div>
                 </div>
-                <div className="h-4 w-10 rounded bg-white/10 animate-pulse" />
               </div>
             </li>
           ))}

@@ -129,8 +129,8 @@ export default function TopArtists({ user = "tubulant_lemon", limit = 6 }: { use
             <div key={i} className="rounded-2xl border border-white/10 bg-[var(--surface-1)] p-4 sm:p-5">
               <div className="flex items-center gap-4">
                 <div className="h-8 w-8 shrink-0 rounded-md bg-white/10 animate-pulse" />
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 w-2/3 rounded bg-white/10 animate-pulse" />
+                <div className="min-w-0 flex-1 space-y-2">
+                  <div className="h-5 w-2/3 rounded bg-white/10 animate-pulse" />
                   <div className="h-3 w-1/4 rounded bg-white/10 animate-pulse" />
                 </div>
               </div>
