@@ -1,9 +1,9 @@
 "use client";
 
-import Athletics from "@/components/sections/Athletics";
+import AthleticsStats from "@/components/sections/AthleticsStats";
 
 export default function AthleticsPage() {
-  return <Athletics />;
+  return <AthleticsStats />;
 }
 
 
