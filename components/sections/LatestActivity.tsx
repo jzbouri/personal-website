@@ -32,13 +32,18 @@ function secondsToHms(s?: number): string {
   const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
   return h > 0 ? `${h}:${pad(m)}:${pad(sec)}` : `${m}:${pad(sec)}`;
 }
-function formatRelativeFromIsoUtc(iso?: string | null): string {
+
+function formatRelativeEnd(activity?: SummaryActivity | null): string {
+  if (!activity) return "";
+  const iso = activity.start_date || activity.start_date_local;
   if (!iso) return "";
   const isUtc = /Z|[+-]\d{2}:?\d{2}$/.test(iso);
-  const d = new Date(isUtc ? iso : `${iso}Z`);
-  const diffMs = Date.now() - d.getTime();
+  const startMs = new Date(isUtc ? iso : `${iso}Z`).getTime();
+  const durationSec = (activity.elapsed_time ?? activity.moving_time ?? 0);
+  const endMs = startMs + durationSec * 1000;
+  const diffMs = Date.now() - endMs;
   const rtf = new Intl.RelativeTimeFormat(undefined, { numeric: "auto" });
-  const minutes = Math.round(diffMs / 60000);
+  const minutes = Math.max(0, Math.round(diffMs / 60000));
   if (minutes < 1) return "Just now";
   if (minutes < 60) return rtf.format(-minutes, "minute");
   const hours = Math.round(minutes / 60);
@@ -50,7 +55,6 @@ function formatRelativeFromIsoUtc(iso?: string | null): string {
   const years = Math.round(months / 12);
   return rtf.format(-years, "year");
 }
-
 
 function elevationStr(m?: number): string {
   if (!m && m !== 0) return "-";
@@ -211,7 +215,7 @@ export default function LatestActivity() {
                 <div className="truncate text-white font-semibold text-lg leading-tight">{activity.name || "Activity"}</div>
               </div>
               <div className="text-white/70 text-sm sm:pl-3 shrink-0">
-                {formatRelativeFromIsoUtc(activity.start_date || activity.start_date_local || "")}
+                Finished {formatRelativeEnd(activity)}
                 {location ? <span className="mx-2 text-white/40">•</span> : null}
                 {location ? <span className="text-white/80">{location}</span> : null}
               </div>

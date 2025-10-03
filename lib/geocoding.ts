@@ -1,36 +1,4 @@
-import NodeGeocoder from "node-geocoder";
-
-const geocoder = NodeGeocoder({
-  provider: "openstreetmap" as const,
-  formatter: null,
-});
-
 export async function reverseGeocodeToCityRegion(lat: number, lng: number): Promise<string | null> {
-  try {
-    const res = await geocoder.reverse({ lat, lon: lng });
-    const first = res?.[0] as {
-      city?: string;
-      town?: string;
-      village?: string;
-      hamlet?: string;
-      suburb?: string;
-      neighbourhood?: string;
-      state?: string;
-      administrativeLevels?: { level1long?: string; level2long?: string };
-      countryCode?: string;
-      formattedAddress?: string;
-    } | undefined;
-    if (!first) return null;
-    const city = first.city || first.town || first.village || first.hamlet || first.suburb || first.neighbourhood;
-    const region = first.state || first.administrativeLevels?.level1long || first.administrativeLevels?.level2long;
-    const countryCode = first.countryCode;
-    const parts = [city, region, countryCode].filter(Boolean);
-    if (parts.length) return parts.join(", ");
-    if (first.formattedAddress) return first.formattedAddress;
-  } catch {
-    return null;
-  }
-
   try {
     const url = new URL("https://nominatim.openstreetmap.org/reverse");
     url.searchParams.set("format", "jsonv2");
@@ -38,11 +6,14 @@ export async function reverseGeocodeToCityRegion(lat: number, lng: number): Prom
     url.searchParams.set("lon", String(lng));
     url.searchParams.set("zoom", "14");
     url.searchParams.set("addressdetails", "1");
+    const email = process.env.GEOCODER_EMAIL || "hello@jbouri.ca";
+    url.searchParams.set("email", email);
 
     const res = await fetch(url.toString(), {
       headers: {
-        "User-Agent": "personal-website/1.0 (reverse-geocoding)",
-        Accept: "application/json",
+        "User-Agent": "jbouri.ca/1.0 (reverse-geocoding)",
+        "Accept": "application/json",
+        "Accept-Language": "en",
       },
       cache: "no-store",
     });
@@ -65,5 +36,3 @@ export async function reverseGeocodeToCityRegion(lat: number, lng: number): Prom
     return null;
   }
 }
-
-
