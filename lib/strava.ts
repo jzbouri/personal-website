@@ -2,10 +2,6 @@ import { getValidStravaAccessToken } from "./strava-auth";
 
 const STRAVA_API_BASE = "https://www.strava.com/api/v3" as const;
 
-export type StravaAccess = {
-  accessToken: string;
-};
-
 export interface StravaClientOptions {
   accessToken?: string;
 }
@@ -56,6 +52,10 @@ export class StravaClient {
   async getLatestActivity<T = unknown>(): Promise<T | null> {
     const activities = await this.request<T[]>(`/athlete/activities?per_page=1&page=1`);
     return activities?.length ? activities[0] : null;
+  }
+
+  getActivityById<T = unknown>(activityId: number) {
+    return this.request<T>(`/activities/${activityId}`);
   }
 }
 
