@@ -13,8 +13,6 @@ type Track = {
   ["@attr"]?: { rank?: string };
 };
 
-type LastFmTopTracksResponse = { tracks?: Track[] };
-
 const PERIODS: { value: TopArtistsPeriod; label: string }[] = [
   { value: "7day", label: "Last 7 days" },
   { value: "1month", label: "Last month" },

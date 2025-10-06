@@ -87,7 +87,7 @@ export async function GET(_req: NextRequest) {
     } : null;
 
     let location: string | null = null;
-    const start = (enriched as any)?.start_latlng;
+  const start = Array.isArray((enriched as StravaSummary | null)?.start_latlng) ? (enriched as StravaSummary).start_latlng : null;
     if (Array.isArray(start) && start.length === 2 && typeof start[0] === "number" && typeof start[1] === "number") {
       try {
         location = await reverseGeocodeToCityRegion(start[0], start[1]);

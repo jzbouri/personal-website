@@ -1,4 +1,3 @@
-import { NextRequest } from "next/server";
 import { createAdminClient } from "@/utils/supabase/admin";
 
 function json(data: unknown, init?: number | ResponseInit) {
@@ -8,7 +7,7 @@ function json(data: unknown, init?: number | ResponseInit) {
   });
 }
 
-export async function GET(_req: NextRequest) {
+export async function GET() {
   try {
     const supabase = createAdminClient();
     const { data, error } = await supabase.from("race_results").select("*");

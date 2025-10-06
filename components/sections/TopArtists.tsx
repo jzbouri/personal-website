@@ -11,8 +11,6 @@ type Artist = {
   ["@attr"]?: { rank?: string };
 };
 
-type LastFmTopArtistsResponse = { artists?: Artist[] };
-
 const PERIODS: { value: TopArtistsPeriod; label: string }[] = [
   { value: "7day", label: "Last 7 days" },
   { value: "1month", label: "Last month" },

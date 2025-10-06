@@ -14,8 +14,6 @@ type Album = {
   ["@attr"]?: { rank?: string };
 };
 
-type LastFmTopAlbumsResponse = { albums?: Album[] };
-
 const PERIODS: { value: TopArtistsPeriod; label: string }[] = [
   { value: "7day", label: "Last 7 days" },
   { value: "1month", label: "Last month" },
