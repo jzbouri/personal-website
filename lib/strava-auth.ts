@@ -1,3 +1,4 @@
+import "server-only";
 import { createAdminClient } from "@/utils/supabase/admin";
 
 const STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token";

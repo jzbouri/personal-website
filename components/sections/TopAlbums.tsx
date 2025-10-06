@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { TopArtistsPeriod } from "@/lib/lastfm";
+import type { TopArtistsPeriod } from "@/lib/lastfm";
 
 type Album = {
   name: string;
@@ -14,9 +14,7 @@ type Album = {
   ["@attr"]?: { rank?: string };
 };
 
-type LastFmTopAlbumsResponse = {
-  topalbums?: { album?: Album[] };
-};
+type LastFmTopAlbumsResponse = { albums?: Album[] };
 
 const PERIODS: { value: TopArtistsPeriod; label: string }[] = [
   { value: "7day", label: "Last 7 days" },
@@ -53,8 +51,8 @@ export default function TopAlbums({ user = "tubulant_lemon", limit = 5 }: { user
       try {
         const res = await fetch(`/api/lastfm/top-albums?user=${encodeURIComponent(user)}&period=${encodeURIComponent(period)}&limit=${limit}`, { cache: "no-store" });
         if (!res.ok) throw new Error(`Failed: ${res.status}`);
-        const json = (await res.json()) as { user: string; period: TopArtistsPeriod; data: LastFmTopAlbumsResponse };
-        const list = (json?.data?.topalbums?.album ?? []) as Album[];
+        const json = (await res.json()) as { user: string; period: TopArtistsPeriod; albums: Album[] };
+        const list = (json?.albums ?? []) as Album[];
         if (!isCancelled) setAlbums(list);
       } catch (e) {
         if (!isCancelled) setError(e instanceof Error ? e.message : "Unknown error");

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { TopArtistsPeriod } from "@/lib/lastfm";
+import type { TopArtistsPeriod } from "@/lib/lastfm";
 
 type Track = {
   name: string;
@@ -13,9 +13,7 @@ type Track = {
   ["@attr"]?: { rank?: string };
 };
 
-type LastFmTopTracksResponse = {
-  toptracks?: { track?: Track[] };
-};
+type LastFmTopTracksResponse = { tracks?: Track[] };
 
 const PERIODS: { value: TopArtistsPeriod; label: string }[] = [
   { value: "7day", label: "Last 7 days" },
@@ -42,8 +40,8 @@ export default function TopTracks({ user = "tubulant_lemon", limit = 10 }: { use
       try {
         const res = await fetch(`/api/lastfm/top-tracks?user=${encodeURIComponent(user)}&period=${encodeURIComponent(period)}&limit=${limit}`, { cache: "no-store" });
         if (!res.ok) throw new Error(`Failed: ${res.status}`);
-        const json = (await res.json()) as { user: string; period: TopArtistsPeriod; data: LastFmTopTracksResponse };
-        const list = (json?.data?.toptracks?.track ?? []) as Track[];
+        const json = (await res.json()) as { user: string; period: TopArtistsPeriod; tracks: Track[] };
+        const list = (json?.tracks ?? []) as Track[];
         if (!isCancelled) setTracks(list);
       } catch (e) {
         if (!isCancelled) setError(e instanceof Error ? e.message : "Unknown error");

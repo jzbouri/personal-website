@@ -1,3 +1,4 @@
+import "server-only";
 import { getValidStravaAccessToken } from "./strava-auth";
 
 const STRAVA_API_BASE = "https://www.strava.com/api/v3" as const;

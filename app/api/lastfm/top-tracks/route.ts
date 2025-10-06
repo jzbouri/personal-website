@@ -17,14 +17,26 @@ export async function GET(req: NextRequest) {
     const page = searchParams.get("page");
 
     const client = createLastFmClient();
-    const data = await client.getTopTracks({
+    type LastFmAlbumRaw = { name?: string; ["#text"]?: string };
+    type LastFmArtistRaw = { name?: string; url?: string };
+    type LastFmTrackRaw = { name?: unknown; url?: unknown; playcount?: string | number; artist?: string | LastFmArtistRaw; album?: string | LastFmAlbumRaw; ["@attr"]?: { rank?: string } };
+    const raw = (await client.getTopTracks({
       user,
       period,
       limit: limitParam ? Number(limitParam) : 10,
       page: page ? Number(page) : undefined,
-    });
+    })) as { toptracks?: { track?: LastFmTrackRaw[] } };
 
-    const response = json({ user, period, data }, 200);
+    const tracks = (raw?.toptracks?.track ?? []).map((t, idx: number) => ({
+      name: String(t?.name ?? ""),
+      url: String(t?.url ?? ""),
+      playcount: typeof t?.playcount === "string" || typeof t?.playcount === "number" ? t.playcount : undefined,
+      artist: typeof t?.artist === "string" ? t.artist : (t?.artist?.name ? { name: t.artist.name, url: t.artist.url } : undefined),
+      album: typeof t?.album === "string" ? t.album : (t?.album?.name ? { name: t.album.name, ["#text"]: t.album["#text"] } : undefined),
+      ["@attr"]: { rank: t?.["@attr"]?.rank || String(idx + 1) },
+    }));
+
+    const response = json({ user, period, tracks }, 200);
     response.headers.set(
       "Cache-Control",
       "public, max-age=60, s-maxage=60, stale-while-revalidate=60"

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useLayoutEffect } from "react";
-import polyline from "@mapbox/polyline";
 
 type SummaryActivity = {
   id: number;
@@ -78,6 +77,7 @@ function speedKmh(activity?: SummaryActivity): string {
 
 export default function LatestActivity() {
   const [activity, setActivity] = useState<SummaryActivity | null>(null);
+  const [svgPath, setSvgPath] = useState<{ d: string; width: number; height: number } | null>(null);
   const [location, setLocation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -90,9 +90,10 @@ export default function LatestActivity() {
       try {
         const res = await fetch(`/api/strava/athlete/activities/latest`, { cache: "no-store" });
         if (!res.ok) throw new Error(`Failed: ${res.status}`);
-        const json = (await res.json()) as { latest?: SummaryActivity | null; location?: string | null };
+        const json = (await res.json()) as { latest?: SummaryActivity | null; svgPath?: { d: string; width: number; height: number } | null; location?: string | null };
         if (!cancelled) {
           setActivity(json.latest ?? null);
+          setSvgPath(json.svgPath ?? null);
           setLocation(json.location ?? null);
         }
       } catch (e) {
@@ -105,42 +106,7 @@ export default function LatestActivity() {
     return () => { cancelled = true; };
   }, []);
 
-  const decoded = useMemo(() => {
-    const summary = activity?.map?.summary_polyline;
-    const full = (activity?.map as { polyline?: string } | undefined)?.polyline;
-    const raw = summary || full || null;
-    const points = raw ? polyline.decode(raw) : null;
-    if (!points || !points.length) return null;
-    return points as [number, number][];
-  }, [activity]);
-
-  const svgData = useMemo(() => {
-    if (!decoded || decoded.length < 2) return null as null | {
-      d: string;
-      width: number;
-      height: number;
-    };
-    const lats = decoded.map(p => p[0]);
-    const lngs = decoded.map(p => p[1]);
-    const minLat = Math.min(...lats);
-    const maxLat = Math.max(...lats);
-    const minLng = Math.min(...lngs);
-    const maxLng = Math.max(...lngs);
-    const rangeLat = Math.max(1e-6, maxLat - minLat);
-    const rangeLng = Math.max(1e-6, maxLng - minLng);
-    const aspect = rangeLat / rangeLng;
-    const width = 1000;
-    const height = Math.max(1, Math.round(width * aspect));
-    const pad = 40;
-    const toXY = (lat: number, lng: number) => {
-      const x = pad + ((lng - minLng) / rangeLng) * (width - 2 * pad);
-      const y = pad + (1 - (lat - minLat) / rangeLat) * (height - 2 * pad);
-      return { x, y };
-    };
-    const points = decoded.map(([la, lo]) => toXY(la, lo));
-    const d = points.reduce((acc, p, i) => (i === 0 ? `M ${p.x} ${p.y}` : acc + ` L ${p.x} ${p.y}`), "");
-    return { d, width, height };
-  }, [decoded]);
+  const svgData = svgPath;
 
   const pathRef = useRef<SVGPathElement | null>(null);
   const [dot, setDot] = useState<{ x: number; y: number } | null>(null);

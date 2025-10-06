@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { TopArtistsPeriod } from "@/lib/lastfm";
+import type { TopArtistsPeriod } from "@/lib/lastfm";
 
 type Artist = {
   name: string;
@@ -11,12 +11,7 @@ type Artist = {
   ["@attr"]?: { rank?: string };
 };
 
-type LastFmTopArtistsResponse = {
-  topartists?: {
-    artist?: Artist[];
-    [key: string]: unknown;
-  };
-};
+type LastFmTopArtistsResponse = { artists?: Artist[] };
 
 const PERIODS: { value: TopArtistsPeriod; label: string }[] = [
   { value: "7day", label: "Last 7 days" },
@@ -44,8 +39,8 @@ export default function TopArtists({ user = "tubulant_lemon", limit = 6 }: { use
         const url = `/api/lastfm/top-artists?user=${encodeURIComponent(user)}&period=${encodeURIComponent(period)}&limit=${limit}`;
         const res = await fetch(url, { cache: "no-store" });
         if (!res.ok) throw new Error(`Failed: ${res.status}`);
-        const json = (await res.json()) as { user: string; period: TopArtistsPeriod; data: LastFmTopArtistsResponse };
-        const list = (json?.data?.topartists?.artist ?? []) as Artist[];
+        const json = (await res.json()) as { user: string; period: TopArtistsPeriod; artists: Artist[] };
+        const list = (json?.artists ?? []) as Artist[];
         if (!isCancelled) setArtists(list);
       } catch (e) {
         if (!isCancelled) setError(e instanceof Error ? e.message : "Unknown error");

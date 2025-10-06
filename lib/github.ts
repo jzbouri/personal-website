@@ -1,3 +1,4 @@
+import "server-only";
 export type ContributionBreakdown = {
   calendarTotal: number;
   commits: number;

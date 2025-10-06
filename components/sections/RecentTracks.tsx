@@ -4,13 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-type LastFmRecentTracks = {
-  recenttracks?: {
-    track?: Array<Track>;
-    [key: string]: unknown;
-  };
-};
-
 type Track = {
   name: string;
   artist: { ["#text"]?: string } | string;
@@ -56,8 +49,8 @@ export default function RecentTracks({ user = "tubulant_lemon" }: { user?: strin
       try {
         const res = await fetch(`/api/lastfm/recent-tracks?user=${encodeURIComponent(user)}&limit=10`, { cache: "no-store" });
         if (!res.ok) throw new Error(`Failed: ${res.status}`);
-        const json = (await res.json()) as { user: string; data: LastFmRecentTracks };
-        const list = (json?.data?.recenttracks?.track ?? []) as Track[];
+        const json = (await res.json()) as { user: string; tracks: Track[] };
+        const list = json.tracks ?? [];
         if (!isCancelled) setTracks(list.slice(0, 10));
       } catch (e) {
         if (!isCancelled) setError(e instanceof Error ? e.message : "Unknown error");

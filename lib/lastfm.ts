@@ -1,3 +1,5 @@
+import "server-only";
+
 const LASTFM_BASE_URL = "http://ws.audioscrobbler.com/2.0/" as const;
 
 type LastFmFormat = "json" | "xml";
