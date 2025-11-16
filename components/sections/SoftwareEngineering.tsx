@@ -38,7 +38,7 @@ const experiences: ExperienceItem[] = [
     companyDescription: "AI / Blockchain company that develops AI agents using crypto mining",
     startDate: "January 2025",
     endDate: "April 2025",
-    roleDescription: "Everything including backend, frontend, cloud infrastructure, observability, security, and much more. Helped the company grow from ~100K USD market cap to over 70M USD market cap, and had a <a href='https://www.ridges.ai/benchmarks' target='_blank' rel='noopener noreferrer'>SOTA agent</a> after just 4 months (73.6% on SWE-Bench).",
+    roleDescription: "Everything including backend, frontend, cloud infrastructure, observability, security, and much more. Helped the company grow from ~100K USD market cap to over 70M USD market cap, and had a <a href='https://web.archive.org/web/20250921235613/https://www.ridges.ai/benchmarks' target='_blank' rel='noopener noreferrer'>SOTA agent</a> after just 4 months (73.6% on SWE-Bench).",
     companyUrl: "https://ridges.ai",
     location: "Richmond Hill, ON 🇨🇦",
   },
